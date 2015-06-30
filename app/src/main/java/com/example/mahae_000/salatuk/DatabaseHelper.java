@@ -6,7 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,10 +22,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     //The Android's default system path of your application database.
     //public static String DB_PATH = "/data/data/com.example.mahae_000.salatuk/databases/";
-    public static String DB_PATH = "/app/src/main/res/raw/";
+    public static String DB_PATH2 = "/app/src/main/res/raw/";
+    private String DB_PATH = "/data/data/com.example.mahae_000.salatuk/";
+    private String DB_DIR_PATH = "/data/data/com.example.mahae_000.salatuk/databases";
     //public static String DB_PATH = "";
-    private static String DB_NAME = "salat.sql";
-    private static String DB_NAME_MY = "salat.sql";
+    private static String DB_NAME = "salat.sqlite";
+    private static String DB_NAME_MY = "salat.sqlite";
     private SQLiteDatabase myDataBase;
     private final Context myContext;
 
@@ -41,12 +45,17 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     /**
      * Creates a empty database on the system and rewrites it with your own database.
      * */
-    public void createDataBase() throws IOException{
+
+
+     public void createDataBase() throws IOException{
         // for first database;
+
+
         boolean dbExist = checkDataBase(DB_NAME);
         if(!dbExist){
             try {
-                copyDataBase(DB_NAME_MY,DB_NAME);
+               // copyDataBase(DB_NAME_MY,DB_NAME);
+                StoreDatabase();
             } catch (Exception e) {
                 throw new Error("Error copying database");
             }
@@ -79,7 +88,40 @@ public class DatabaseHelper extends SQLiteOpenHelper{
      * system folder, from where it can be accessed and handled.
      * This is done by transfering bytestream.
      * */
-    private void copyDataBase(String assetfile,String DB) {
+
+
+    private void StoreDatabase() {
+        try {
+//create the directory "databases"
+            File databases_dir = new File(DB_DIR_PATH);
+            databases_dir.mkdirs();
+
+            File DbFile = new File(DB_PATH + DB_NAME);
+            if (!DbFile.exists()) {
+                DbFile.createNewFile();
+
+                InputStream is = myContext.getAssets().open(DB_NAME);
+                FileOutputStream fos = new FileOutputStream(DbFile);
+
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = is.read(buffer)) > 0)
+                    fos.write(buffer,0,length );
+
+                fos.flush();
+                fos.close();
+                is.close();
+                DbFile.renameTo(myContext.getDatabasePath(DB_NAME));
+
+            }
+        }
+        catch (IOException e) {
+            Toast.makeText(myContext, "Error in Attatchment", Toast.LENGTH_SHORT).show();
+            Log.v("logToast","error in attachment");
+        }
+    }
+
+     private void copyDataBase(String assetfile,String DB) {
 
         //Open your local db as the input stream
         InputStream myInput = null;

@@ -56,20 +56,20 @@ public class DetailActivity extends ActionBarActivity {
                 String data_intent =intent.getStringExtra(Intent.EXTRA_TEXT);
                 ((TextView)(rootView.findViewById(R.id.detail_textview))).setText(data_intent);
 
-                String intent_desc =intent.getStringExtra("desc");
-                ((TextView)(rootView.findViewById(R.id.desc2_textview))).setText(intent_desc);
+                //String intent_desc =intent.getStringExtra("desc");
+                ((TextView)(rootView.findViewById(R.id.desc2_textview))).setText("");
 
-                String intent_before =intent.getStringExtra("before");
-                ((TextView)(rootView.findViewById(R.id.before_textview))).setText(intent_before);
+                //String intent_before =intent.getStringExtra("before");
+                ((TextView)(rootView.findViewById(R.id.before_textview))).setText("");
 
-                String intent_fard =intent.getStringExtra("fard");
-                ((TextView)(rootView.findViewById(R.id.fard_textview))).setText(intent_fard);
+                //String intent_fard =intent.getStringExtra("fard");
+                ((TextView)(rootView.findViewById(R.id.fard_textview))).setText("");
 
-                String intent_after =intent.getStringExtra("after");
-                ((TextView)(rootView.findViewById(R.id.after_textview))).setText(intent_after);
+                //String intent_after =intent.getStringExtra("after");
+                ((TextView)(rootView.findViewById(R.id.after_textview))).setText("");
 
-                String intent_plural =intent.getStringExtra("plural");
-                ((TextView)(rootView.findViewById(R.id.plural_textview))).setText(intent_plural);
+                //String intent_plural =intent.getStringExtra("plural");
+                ((TextView)(rootView.findViewById(R.id.plural_textview))).setText("");
 
             }
 

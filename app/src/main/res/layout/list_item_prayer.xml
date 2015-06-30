@@ -4,5 +4,6 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:id="@+id/list_item_prayer_textview"
-    android:minHeight="@dimen/abc_action_bar_default_height_material">
+    android:minHeight="@dimen/abc_action_bar_default_height_material"
+    android:textColor="#ffc12629">
 </TextView>

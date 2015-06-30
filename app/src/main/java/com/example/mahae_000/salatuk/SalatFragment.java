@@ -161,14 +161,14 @@ public class SalatFragment extends Fragment {
         final ListView prayerview = (ListView) rootView.findViewById(R.id.listview_prayer);  //name of listview in fragment_main
 
         prayerview.setAdapter(PrayertAdapter);
-prayerview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        String prayer = PrayertAdapter.getItem(position);
-        //   Toast.makeText(getActivity(),forecast,Toast.LENGTH_SHORT).show(); dy el message el bttl3 kda lma yb2a 7aga successfull aw kda
+        prayerview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String prayer = PrayertAdapter.getItem(position);
+                //   Toast.makeText(getActivity(),forecast,Toast.LENGTH_SHORT).show(); dy el message el bttl3 kda lma yb2a 7aga successfull aw kda
 
 
-      //  SQLiteDatabse mydatabase = openOrCreateDatabase("your database name",MODE_PRIVATE,null);
+                //  SQLiteDatabse mydatabase = openOrCreateDatabase("your database name",MODE_PRIVATE,null);
         /*
 SQLiteDatabase SQ =mydb.getReadableDatabase();
         String[] columns={DbContract.Pray.COLUMN_PRAYER,DbContract.Pray.COLUMN_DESC,DbContract.Pray.COLUMN_BEFORE,DbContract.Pray.COLUMN_FARD,
@@ -176,100 +176,35 @@ SQLiteDatabase SQ =mydb.getReadableDatabase();
 
         Cursor CR =SQ.query(DbContract.Pray.TABLE_NAME,columns," id = ?",)
 */
-        AssetDatabaseHelper dbHelper = new AssetDatabaseHelper(
-                getActivity().getBaseContext(), "salat.sql");
-        try {
-            dbHelper.importIfNotExist();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
 
-        SQLiteDatabase sampleDB = dbHelper.getReadableDatabase();
-// new trial
-        SQLiteDatabase  mDb;
-        DatabaseHelper dbHelper2 = new DatabaseHelper(getActivity().getApplicationContext());
-        try
-        {
-            dbHelper2.createDataBase();
-        }
-        catch (IOException mIOException)
-        {
-            Log.e("inside catch", mIOException.toString() + "  UnableToCreateDatabase");
-            throw new Error("UnableToCreateDatabase");
-        }
-        try
-        {
-            dbHelper2.openDataBase();
-            dbHelper2.close();
-            mDb = dbHelper2.getReadableDatabase();
-        }
-        catch (SQLException mSQLException)
-        {
-            Log.e("SQL exc", "open >>"+ mSQLException.toString());
-            throw mSQLException;
-        }
 
-        /////////////////////////////////////new trial
-        OutputStream outputStream = null;
-        InputStream inputStream = getActivity().getBaseContext().getResources().openRawResource(R.raw.salat);
 
-        byte[] buffer = new byte[1024];
-        int length;
-        try {
-            while ((length = inputStream.read(buffer)) > 0) {
-                outputStream.write(buffer, 0, length);
+
+          //      String desc_db1="Subh or Fajr (Dawn) prayer
+        //        The true dawn begins when we see light spread at the horizon in the East. When the true dawn appears the Fajr prayer time has begun and this prayer time remains until the first glimpse of the disk of the sun appears on the Eastern horizon.";
+                String before_db1="2";
+                String fard_db1="2";
+                String after_db1="-";
+                String plural_db1="The Imam should recit Quran  loudly";
+
+
+
+
+                //  DbContract.Pray pray1 = new DbContract.Pray();
+
+                Intent intent = new Intent(getActivity(),DetailActivity.class).putExtra(Intent.EXTRA_TEXT,prayer);
+                //intent.putExtra("desc1",desc_db1);
+                //intent.putExtra("before1",before_db1);
+                //intent.putExtra("fard1",fard_db1);
+                //intent.putExtra("after",after_db);
+                //intent.putExtra("plural",plural_db);
+                startActivity(intent);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-
-
-        Cursor CR = mDb.rawQuery("SELECT desc,s_before,fard,s_after,plural FROM "
-                + DbContract.Pray.TABLE_NAME + " where " + DbContract.Pray.COLUMN_PRAYER + " like '%" + prayer
-                + "%'", null);
-
-        CR.moveToFirst();
-
-
-        String desc_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_DESC));
-        String before_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_BEFORE));
-        String fard_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_FARD));
-        String after_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_AFTER));
-        String plural_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_PLURAL));
-
-        if (!CR.isClosed())
-        {
-            CR.close();
-
-        }
-        Log.v("CR",desc_db);
-
-
-      //  DbContract.Pray pray1 = new DbContract.Pray();
-
-        Intent intent = new Intent(getActivity(),DetailActivity.class).putExtra(Intent.EXTRA_TEXT,prayer);
-        intent.putExtra("desc",desc_db);
-        intent.putExtra("before",before_db);
-        intent.putExtra("fard",fard_db);
-        intent.putExtra("after",after_db);
-        intent.putExtra("plural",plural_db);
-        startActivity(intent);
-    }
-
-});
-        Log.v("LOG_TAG", "after setadapter");
+        });
+        Log.
+                v("LOG_TAG", "after setadapter");
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -293,7 +228,7 @@ SQLiteDatabase SQ =mydb.getReadableDatabase();
         JSONArray dailyArray = prayerJson.getJSONArray(API_ITEM);
         final int numberOfItems = dailyArray.length();
         Log.v("number of items",String.valueOf(numberOfItems));
-       JSONObject dateJson = dailyArray.getJSONObject(0);
+        JSONObject dateJson = dailyArray.getJSONObject(0);
         /*
       JSONObject FajrJson = dailyArray.getJSONObject(1);
         JSONObject ShrouqJson = dailyArray.getJSONObject(2);
@@ -303,13 +238,13 @@ SQLiteDatabase SQ =mydb.getReadableDatabase();
         JSONObject ishaJson = dailyArray.getJSONObject(6);
         */
         //JSONObject dateJson = prayerJson.getJSONObject(API_DATE);
-      //  JSONObject FajrJson = prayerJson.getJSONObject(API_FAJR);
-      //  JSONObject shrouqJson = prayerJson.getJSONObject(API_SHUROOQ);
+        //  JSONObject FajrJson = prayerJson.getJSONObject(API_FAJR);
+        //  JSONObject shrouqJson = prayerJson.getJSONObject(API_SHUROOQ);
         //JSONObject duhrJson = prayerJson.getJSONObject(API_DHUHR);
         //JSONObject asrJson = prayerJson.getJSONObject(API_ASR);
         //JSONObject maghribJson = prayerJson.getJSONObject(API_MAGHRIB);
 //        JSONObject ishaJson = prayerJson.getJSONObject(API_ISHA);
-       // JSONObject FajrJson;
+        // JSONObject FajrJson;
         String[] resultStrs = new String[7];
         resultStrs[0]="Date  "+dateJson.getString(API_DATE);
 
@@ -321,15 +256,15 @@ SQLiteDatabase SQ =mydb.getReadableDatabase();
         resultStrs[5]="Maghrib   "+dateJson.getString(API_MAGHRIB);
         resultStrs[6]="Isha     "+dateJson.getString(API_ISHA);
 
-      //  Log.v("dateJson.getstring", date);
+        //  Log.v("dateJson.getstring", date);
 
         for (int i = 0; i < 7; i++) {
-         //   resultStrs[i] = dateJson.getString(API_DATE);
+            //   resultStrs[i] = dateJson.getString(API_DATE);
             //resultStrs[i] = FajrJson.getString(API_FAJR);
             Log.v("FAJRJSON.getstring", resultStrs[i]);
         }
         //  resultStrs[0]=FajrJson.getString(API_FAJR);
-       // Log.v("FAJRJSON.getstring", resultStrs[0]);
+        // Log.v("FAJRJSON.getstring", resultStrs[0]);
         return resultStrs;
 
 
