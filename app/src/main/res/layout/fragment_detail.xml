@@ -1,4 +1,12 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_above="@+id/feedback_send"
+    android:fillViewport="true" >
+
+
+<RelativeLayout
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,12 +20,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-<TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/desc_textview"
-    android:layout_below="@+id/detail_textview"
-    android:layout_toLeftOf="@+id/plural_textview"
-    android:layout_toStartOf="@+id/plural_textview" />
+
 		<TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -25,7 +28,7 @@
     android:text="@string/before_label"
 
             android:id="@+id/textView3"
-            android:layout_below="@+id/detail_textview"
+            android:layout_below="@+id/desc2_textview"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginTop="83dp" />
@@ -40,11 +43,12 @@
     android:layout_height="wrap_content"
     android:textStyle="bold"
     android:text="@string/fard_label"
-
                 android:id="@+id/textView4"
-                android:layout_alignBottom="@+id/desc_textview"
+
+                android:layout_below="@+id/before_textview"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="43dp" />
 		<TextView android:text="@string/hello_world" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/fard_textview"
@@ -93,6 +97,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/desc2_textview"
         android:layout_below="@+id/detail_textview"
-        android:layout_toRightOf="@+id/desc_textview"
-        android:layout_toEndOf="@+id/desc_textview" />
+       />
 </RelativeLayout>
+</ScrollView>

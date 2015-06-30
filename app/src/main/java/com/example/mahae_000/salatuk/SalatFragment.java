@@ -29,6 +29,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -50,11 +52,47 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class SalatFragment extends Fragment {
     public ArrayAdapter<String> PrayertAdapter;
-    private DbHelper mydb ;
+    //private DbHelper mydb ;
+    private String DB_NAME = "salat.sqlite";
+    private String DB_PATH = "/data/data/com.example.mahae_000.salatuk/";
+    private String DB_DIR_PATH = "/data/data/com.example.mahae_000.salatuk/databases";
+    SQLiteDatabase  mDb;
+    Cursor CR;
+    DBHELPER dbhelper;
+    private void StoreDatabase() {
+        try {
+            //create the directory "databases"
+            File databases_dir = new File(DB_DIR_PATH);
+            databases_dir.mkdirs();
+            //create the file "fooddb" in the directory "databases"
+            File DbFile = new File(DB_PATH + DB_NAME);
+            if (!DbFile.exists()) {
+                DbFile.createNewFile();
 
+                InputStream is = getActivity().getAssets().open(DB_NAME);
+                FileOutputStream fos = new FileOutputStream(DbFile);
+
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = is.read(buffer)) > 0)
+                    fos.write(buffer,0,length );
+
+                fos.flush();
+                fos.close();
+                is.close();
+                DbFile.renameTo(getActivity().getDatabasePath(DB_NAME));
+
+            }
+        }
+        catch (IOException e) {
+            //Toast.makeText(MainActivity.this, "Error in Attatchment", Toast.LENGTH_SHORT).show();
+            Log.v("toast","error in attachement");
+        }
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StoreDatabase();
         setHasOptionsMenu(true);
 
     }
@@ -189,7 +227,12 @@ SQLiteDatabase SQ =mydb.getReadableDatabase();
         SQLiteDatabase sampleDB = dbHelper.getReadableDatabase();
         */
 // new trial
-                SQLiteDatabase  mDb;
+
+                 dbhelper = new DBHELPER(getActivity().getBaseContext());
+
+
+                mDb =dbhelper.getReadableDatabase();
+                /*
                 DatabaseHelper dbHelper2 = new DatabaseHelper(getActivity().getApplicationContext());
                 try
                 {
@@ -212,39 +255,51 @@ SQLiteDatabase SQ =mydb.getReadableDatabase();
                     throw mSQLException;
                 }
 
+*/
 
-
-
-                Cursor CR = mDb.rawQuery("SELECT desc,s_before,fard,s_after,plural FROM "
-                        + DbContract.Pray.TABLE_NAME + " where " + DbContract.Pray.COLUMN_PRAYER + " like '%" + prayer
+String sub_prayer=prayer.substring(0,3);
+                Log.v("sub string is",sub_prayer);
+                //str.substring(startIndex, endIndex);
+                CR = mDb.rawQuery("SELECT desc,s_before,fard,s_after,plural FROM "
+                        + DbContract.Pray.TABLE_NAME + " where " + DbContract.Pray.COLUMN_PRAYER + " like '%" + sub_prayer
                         + "%'", null);
 
-                CR.moveToFirst();
+                if( CR != null && CR.moveToFirst() ){
+
+                    String desc_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_DESC));
+                    Log.v("insert CR not null",desc_db);
+                    String before_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_BEFORE));
+                    String fard_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_FARD));
+                    String after_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_AFTER));
+                    String plural_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_PLURAL));
+/*
+                    if (!CR.isClosed())
+                    {
+                        CR.close();
+
+                    }
+                    */
+                    //dbhelper.close();
 
 
-                String desc_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_DESC));
-                String before_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_BEFORE));
-                String fard_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_FARD));
-                String after_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_AFTER));
-                String plural_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_PLURAL));
-
-                if (!CR.isClosed())
-                {
-                    CR.close();
-
+                    Intent intent = new Intent(getActivity(),DetailActivity.class).putExtra(Intent.EXTRA_TEXT,prayer);
+                    intent.putExtra("desc",desc_db);
+                    intent.putExtra("before",before_db);
+                    intent.putExtra("fard",fard_db);
+                    intent.putExtra("after",after_db);
+                    intent.putExtra("plural",plural_db);
+                    startActivity(intent);
                 }
-                Log.v("CR",desc_db);
+             //   CR.moveToFirst();
+
+
+
+             //   Log.v("CR",desc_db);
 
 
                 //  DbContract.Pray pray1 = new DbContract.Pray();
 
-                Intent intent = new Intent(getActivity(),DetailActivity.class).putExtra(Intent.EXTRA_TEXT,prayer);
-                intent.putExtra("desc",desc_db);
-                intent.putExtra("before",before_db);
-                intent.putExtra("fard",fard_db);
-                intent.putExtra("after",after_db);
-                intent.putExtra("plural",plural_db);
-                startActivity(intent);
+
             }
 
         });
@@ -255,6 +310,62 @@ SQLiteDatabase SQ =mydb.getReadableDatabase();
 
 
         return rootView;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (!CR.isClosed())
+        {
+            CR.close();
+
+        }
+        if (dbhelper!=null) {
+            dbhelper.close();
+        }
+        /*
+        if ( mDb!= null)
+        {
+            mDb.close();
+        }
+        */
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (!CR.isClosed())
+        {
+            CR.close();
+
+        }
+        if (dbhelper!=null) {
+            dbhelper.close();
+        }
+        /*
+        if ( mDb!= null)
+        {
+            mDb.close();
+        }
+        */
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (!CR.isClosed())
+        {
+            CR.close();
+
+        }
+        if (dbhelper!=null) {
+            dbhelper.close();
+        }
+        /*
+        if ( mDb!= null)
+        {
+            mDb.close();
+        }
+        */
     }
 
     private String[] getPrayerTimeFromJson(String prayerJsonStr)
