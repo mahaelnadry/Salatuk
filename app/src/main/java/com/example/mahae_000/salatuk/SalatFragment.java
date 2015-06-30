@@ -176,35 +176,79 @@ SQLiteDatabase SQ =mydb.getReadableDatabase();
 
         Cursor CR =SQ.query(DbContract.Pray.TABLE_NAME,columns," id = ?",)
 */
+        /*
+        AssetDatabaseHelper dbHelper = new AssetDatabaseHelper(
+                getActivity().getBaseContext(), "salat.sql");
+        try {
+            dbHelper.importIfNotExist();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        SQLiteDatabase sampleDB = dbHelper.getReadableDatabase();
+        */
+// new trial
+                SQLiteDatabase  mDb;
+                DatabaseHelper dbHelper2 = new DatabaseHelper(getActivity().getApplicationContext());
+                try
+                {
+                    dbHelper2.createDataBase();
+                }
+                catch (IOException mIOException)
+                {
+                    Log.e("loginside catch", mIOException.toString() + "  UnableToCreateDatabase");
+                    throw new Error("UnableToCreateDatabase");
+                }
+                try
+                {
+                    dbHelper2.openDataBase();
+                    dbHelper2.close();
+                    mDb = dbHelper2.getReadableDatabase();
+                }
+                catch (SQLException mSQLException)
+                {
+                    Log.e("logSQL exc", "open >>"+ mSQLException.toString());
+                    throw mSQLException;
+                }
 
 
 
 
+                Cursor CR = mDb.rawQuery("SELECT desc,s_before,fard,s_after,plural FROM "
+                        + DbContract.Pray.TABLE_NAME + " where " + DbContract.Pray.COLUMN_PRAYER + " like '%" + prayer
+                        + "%'", null);
 
-          //      String desc_db1="Subh or Fajr (Dawn) prayer
-        //        The true dawn begins when we see light spread at the horizon in the East. When the true dawn appears the Fajr prayer time has begun and this prayer time remains until the first glimpse of the disk of the sun appears on the Eastern horizon.";
-                String before_db1="2";
-                String fard_db1="2";
-                String after_db1="-";
-                String plural_db1="The Imam should recit Quran  loudly";
+                CR.moveToFirst();
 
 
+                String desc_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_DESC));
+                String before_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_BEFORE));
+                String fard_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_FARD));
+                String after_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_AFTER));
+                String plural_db=CR.getString(CR.getColumnIndex(DbContract.Pray.COLUMN_PLURAL));
+
+                if (!CR.isClosed())
+                {
+                    CR.close();
+
+                }
+                Log.v("CR",desc_db);
 
 
                 //  DbContract.Pray pray1 = new DbContract.Pray();
 
                 Intent intent = new Intent(getActivity(),DetailActivity.class).putExtra(Intent.EXTRA_TEXT,prayer);
-                //intent.putExtra("desc1",desc_db1);
-                //intent.putExtra("before1",before_db1);
-                //intent.putExtra("fard1",fard_db1);
-                //intent.putExtra("after",after_db);
-                //intent.putExtra("plural",plural_db);
+                intent.putExtra("desc",desc_db);
+                intent.putExtra("before",before_db);
+                intent.putExtra("fard",fard_db);
+                intent.putExtra("after",after_db);
+                intent.putExtra("plural",plural_db);
                 startActivity(intent);
             }
 
         });
-        Log.
-                v("LOG_TAG", "after setadapter");
+        Log.v("LOG_TAG", "after setadapter");
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
