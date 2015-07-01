@@ -311,7 +311,7 @@ String sub_prayer=prayer.substring(0,3);
 
         return rootView;
     }
-
+/*
     @Override
     public void onPause() {
         super.onPause();
@@ -323,12 +323,7 @@ String sub_prayer=prayer.substring(0,3);
         if (dbhelper!=null) {
             dbhelper.close();
         }
-        /*
-        if ( mDb!= null)
-        {
-            mDb.close();
-        }
-        */
+
     }
 
     @Override
@@ -342,13 +337,11 @@ String sub_prayer=prayer.substring(0,3);
         if (dbhelper!=null) {
             dbhelper.close();
         }
-        /*
-        if ( mDb!= null)
-        {
-            mDb.close();
         }
-        */
-    }
+
+       */
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
