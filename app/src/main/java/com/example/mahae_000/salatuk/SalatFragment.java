@@ -59,6 +59,7 @@ public class SalatFragment extends Fragment {
     SQLiteDatabase  mDb;
     Cursor CR;
     DBHELPER dbhelper;
+    public static final int NOTIFICATION_ID = 1;
     private void StoreDatabase() {
         try {
             //create the directory "databases"
