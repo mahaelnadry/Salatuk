@@ -10,5 +10,10 @@
 	<string name="fard_label">Fard(obligatory)</string>
 		<string name="after_label">Sunnahs after fard(optional)</string>
 	<string name="plural_label">Congregational Prayer(salat al-jama‘ah)</string>
+    <string name="notification_title">Salatuk</string>
+    <string name="notification_text">Remember prayers times of today</string>
+    <string name="title_activity_main_activity2">MainActivity2</string>
+
+
 	
 </resources>
